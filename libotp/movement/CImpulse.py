@@ -15,6 +15,9 @@ class CImpulse(DirectObject.DirectObject):
         self.nodePath = None
         self.VecType = None
 
+    def isCpp(self):
+        return 1
+
     def process(self, dt):
         pass
 
@@ -24,8 +27,8 @@ class CImpulse(DirectObject.DirectObject):
             self.nodePath = self.mover.getNodePath()
             self.VecType = self.mover.VecType
 
-    def setNodePath(self, nodePath):
-        self.nodePath = nodePath
+    def getMover(self):
+        return self.mover
 
     def clearMover(self, mover=None):
         if self.mover == mover or mover is None:
@@ -35,11 +38,8 @@ class CImpulse(DirectObject.DirectObject):
         else:
             self.notify.warning('clearMover: unknown CMover')
 
+    def setNodePath(self, nodePath):
+        self.nodePath = nodePath
+
     def getNodePath(self):
         return self.nodePath
-
-    def getMover(self):
-        return self.mover
-
-    def isCpp(self):
-        return 1
