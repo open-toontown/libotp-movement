@@ -30,18 +30,8 @@ class CMover:
     def getRotSpeed(self):
         return self.rotSpeed
 
-    def setNodePath(self, objNodePath):
-        self.objNodePath = objNodePath
-
     def getNodePath(self):
         return self.objNodePath
-
-    def setDt(self, dt):
-        self.dt = dt
-        if self.getDt() == -1.0:
-            clockDelta = globalClock.getFrameTime()
-            selt.dt = clockDelta - self.dtClock
-            self.dtClock = clockDelta
 
     def getDt(self):
         return self.dt
@@ -67,13 +57,8 @@ class CMover:
 
         return False
 
-    def getCImpulse(self, name):
-        return self.cImpulses.get(name)
-
-    def processCImpulses(self, dt=None):
-        if dt is not None:
-            self.dt = dt
-
+    def processCImpulses(self, dt):
+        self.dt = dt
         if self.getDt() == -1.0:
             clockDelta = globalClock.getFrameTime()
             self.dt = clockDelta - self.dtClock
