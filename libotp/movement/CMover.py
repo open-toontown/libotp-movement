@@ -36,18 +36,6 @@ class CMover:
     def getNodePath(self):
         return self.objNodePath
 
-    def processCImpulses(self, dt=None):
-        if dt is not None:
-            self.dt = dt
-
-        if self.getDt() == -1.0:
-            clockDelta = globalClock.getFrameTime()
-            self.dt = clockDelta - self.dtClock
-            self.dtClock = clockDelta
-
-        for cImpulse in self.cImpulses.values():
-            cImpulse.process(self.getDt())
-
     def setDt(self, dt):
         self.dt = dt
         if self.getDt() == -1.0:
@@ -61,17 +49,6 @@ class CMover:
     def resetDt(self):
         clockDelta = globalClock.getFrameTime()
         self.dtClock = clockDelta
-
-    def integrate(self):
-        if not self.objNodePath or self.objNodePath.isEmpty():
-            return
-
-        self.shove *= self.getDt()
-        self.objNodePath.setFluidPos(self.objNodePath, self.shove)
-        self.rotShove *= self.getDt()
-        self.objNodePath.setHpr(self.objNodePath, self.rotShove)
-        self.shove = Vec3(0, 0, 0)
-        self.rotShove = Vec3(0, 0, 0)
 
     def addCImpulse(self, name, cImpulse):
         if not cImpulse:
@@ -90,6 +67,21 @@ class CMover:
 
         return False
 
+    def getCImpulse(self, name):
+        return self.cImpulses.get(name)
+
+    def processCImpulses(self, dt=None):
+        if dt is not None:
+            self.dt = dt
+
+        if self.getDt() == -1.0:
+            clockDelta = globalClock.getFrameTime()
+            self.dt = clockDelta - self.dtClock
+            self.dtClock = clockDelta
+
+        for cImpulse in self.cImpulses.values():
+            cImpulse.process(self.getDt())
+
     def addShove(self, shove):
         self.shove += shove
 
@@ -102,5 +94,13 @@ class CMover:
     def addRotForce(self, rotForce):
         self.rotForce += rotForce
 
-    def getCImpulse(self, name):
-        return self.cImpulses.get(name)
+    def integrate(self):
+        if not self.objNodePath or self.objNodePath.isEmpty():
+            return
+
+        self.shove *= self.getDt()
+        self.objNodePath.setFluidPos(self.objNodePath, self.shove)
+        self.rotShove *= self.getDt()
+        self.objNodePath.setHpr(self.objNodePath, self.rotShove)
+        self.shove = Vec3(0, 0, 0)
+        self.rotShove = Vec3(0, 0, 0)
