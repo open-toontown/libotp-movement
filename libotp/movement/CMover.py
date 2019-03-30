@@ -37,8 +37,8 @@ class CMover:
         return self.dt
 
     def resetDt(self):
-        clockDelta = globalClock.getFrameTime()
-        self.dtClock = clockDelta
+        self.dt = 1.0
+        self.dtClock = globalClock.getFrameTime()
 
     def addCImpulse(self, name, cImpulse):
         if not cImpulse:
